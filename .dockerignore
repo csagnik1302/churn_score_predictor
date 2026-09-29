@@ -13,4 +13,5 @@ __pycache__/
 .pytest_cache/
 note
 note-2
+note-3
 generate_report.py
