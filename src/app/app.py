@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel, Field
 from typing import Literal
 from src.serving.inference import predict
+import gradio as gr
 
 app=FastAPI()
 
@@ -43,6 +44,60 @@ def api_predict(data:user_input):
     response=predict(data)
     return response
 
+############################ GRADIO #######################################
+
+def ui_predict(age, days_since_last_login, avg_time_spent_in_seconds, avg_transaction_value, avg_frequency_login_days, points_in_wallet, joining_date, gender, region_category, membership_category, joined_through_referral, preferred_offer_types, medium_of_operation, internet_option, used_special_discount, offer_application_preference, past_complaint, complaint_status, feedback):
+    
+    ui_user_input_dict={'age':age, 
+                        'days_since_last_login':days_since_last_login, 
+                        'avg_time_spent_in_seconds':avg_time_spent_in_seconds, 
+                        'avg_transaction_value':avg_transaction_value, 
+                        'avg_frequency_login_days':avg_frequency_login_days, 
+                        'points_in_wallet':points_in_wallet, 
+                        'joining_date':joining_date, 
+                        'gender':gender, 
+                        'region_category':region_category, 
+                        'membership_category':membership_category, 
+                        'joined_through_referral':joined_through_referral, 
+                        'preferred_offer_types':preferred_offer_types, 
+                        'medium_of_operation':medium_of_operation, 
+                        'internet_option':internet_option, 
+                        'used_special_discount':used_special_discount, 
+                        'offer_application_preference':offer_application_preference, 
+                        'past_complaint':past_complaint, 
+                        'complaint_status':complaint_status, 
+                        'feedback':feedback}
+
+    return predict(ui_user_input_dict)
+
+
+interface=gr.Interface(fn=ui_predict,
+                       inputs=[gr.Number(label='Age', minimum=1, maximum=100),
+                               gr.Number(label='Days since last login', minimum=0),
+                               gr.Number(label='Average transaction value', minimum=0),
+                               gr.Number(label='Average time spent (seconds)', minimum=0),
+                               gr.Number(label='Average login frequency (days)', minimum=0),
+                               gr.Number(label='Points in wallet', minimum=0),
+                               gr.DateTime(label='Joining date', type="string", value="2015-01-01", include_time=False),
+                               gr.Dropdown(label='Gender', choices=['M', 'F', 'Unknown']),
+                               gr.Dropdown(label='Region', choices=['Village', 'Town', 'City', 'Unknown']),
+                               gr.Dropdown(label='Membership category', choices=['Basic Membership', 'No Membership', 'Gold Membership', 'Platinum Membership', 'Premium Membership', 'Silver Membership']),
+                               gr.Dropdown(label='Joined via referral', choices=['Yes', 'No', '?']),
+                               gr.Dropdown(label='Preferred offer type', choices=['Gift Vouchers/Coupons','Without Offers','Credit/Debit Card Offers']),
+                               gr.Dropdown(label='Device used for operation', choices=['Desktop', 'Smartphone', 'Both', '?']),
+                               gr.Dropdown(label='Internet connection type', choices=['Mobile_Data', 'Wi-Fi', 'Fiber_Optic']),
+                               gr.Dropdown(label='Used special discount', choices=['Yes', 'No']),
+                               gr.Dropdown(label='Offer application preference', choices=['Yes', 'No']),
+                               gr.Dropdown(label='Had a past complaint', choices=['Yes', 'No']),
+                               gr.Dropdown(label='Complaint status', choices=['Not Applicable', 'Solved', 'Solved in Follow-up', 'Unsolved', 'No Information Available']),
+                               gr.Dropdown(label='Feedback category', choices=['Poor Website','Poor Product Quality','Poor Customer Service','No reason specified','Reasonable Price','Too many ads','Products always in Stock','User Friendly Website','Quality Customer Care'])],
+                        outputs=gr.Number(label='Churn Score'),
+                        title='User Churn Score Predictor',
+                        description='Predict the Risk Score of Customer',
+                        theme=gr.themes.Soft())
+
+
+app=gr.mount_gradio_app(app, interface, path="/ui")
 
 
 if __name__=='__main__':
