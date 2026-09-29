@@ -1,5 +1,0 @@
-Score	Who they are	Typical profile
-1 and 2	Happy, high-value customers	Positive feedback only (Products in Stock, Quality Customer Care, Reasonable Price, User Friendly Website). Median transaction value is about 52k, roughly double the other groups. Median wallet points are 750 to 800, and they log in about every 10 days. Only Gold, Silver, Platinum, or Premium members appear here.
-3	Middling customers	Negative feedback, mid-tier membership. Median transaction value is about 26k and wallet points about 750.
-4	Unhappy and drifting	Negative feedback. Skews to Basic or No Membership, or Silver and Gold. Wallet points are about 660.
-5	Most likely to leave	Negative feedback, and 63 to 64% of Basic and No Membership customers land here. Wallet points are lowest, about 600.
